@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+  - "12"
+
+env:
+  global:
+    - ENV=PROD
+
+before_install:
+  - yarn install
+
+script:
+  # - yarn test
+  - yarn build
+
+deploy:
+  - provider: script
+    script: bash scripts/deploy-script.sh
+    skip_cleanup: true
+    on:
+      branch: master

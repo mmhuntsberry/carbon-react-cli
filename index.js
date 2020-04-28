@@ -1,63 +1,80 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const inquirer = require('inquirer');
+const fs = require("fs");
+const inquirer = require("inquirer");
 
-const CHOICES = fs.readdirSync(`${__dirname}/templates`);
+const CHOICES = {
+  projects: fs.readdirSync(`${__dirname}/templates/projects`),
+  cicd: fs.readdirSync(`${__dirname}/templates/cicd`),
+};
 
 const QUESTIONS = [
   {
-    name: 'project-choice',
-    type: 'list',
-    message: 'What project template would you like to generate?',
-    choices: CHOICES
+    name: "project-choice",
+    type: "list",
+    message: "What project template would you like to generate?",
+    choices: CHOICES.projects,
   },
   {
-    name: 'project-name',
-    type: 'input',
-    message: 'Project name:',
+    name: "cicd-provider",
+    type: "list",
+    message: "Would you like to setup continous integration/deployment?",
+    choices: [...CHOICES.cicd, "none"],
+  },
+  {
+    name: "project-name",
+    type: "input",
+    message: "Project name:",
     validate(input) {
-      if(/^([A-Za-z\-\_\d])+$/.test(input)) return true;
-      else return 'Project name may only include letters, numbers, underscores, and hashes.'
-    }
-  }
-]
+      if (/^([A-Za-z\-\_\d])+$/.test(input)) return true;
+      else
+        return "Project name may only include letters, numbers, underscores, and hashes.";
+    },
+  },
+];
 
 const CURR_DIR = process.cwd();
 
+inquirer.prompt(QUESTIONS).then((answers) => {
+  const projectChoice = answers["project-choice"];
+  const projectName = answers["project-name"];
+  const cicdChoice = answers["cicd-provider"];
+  const projectTemplatePath = `${__dirname}/templates/projects/${projectChoice}`;
+  const cicdTemplatePath = `${__dirname}/templates/cicd/${cicdChoice}`;
 
-inquirer.prompt(QUESTIONS)
-  .then(answers => {
-    const projectChoice = answers['project-choice'];
-    const projectName = answers['project-name'];
-    const templatePath = `${__dirname}/templates/${projectChoice}`;
+  fs.mkdirSync(`${CURR_DIR}/${projectName}`);
 
-    fs.mkdirSync(`${CURR_DIR}/${projectName}`);
+  createDirectoryContents(projectTemplatePath, projectName);
 
-    createDirectoryContents(templatePath, projectName);
-  });
+  console.log(cicdTemplatePath);
+
+  if (!fs.existsSync(cicdTemplatePath)) return;
+  createDirectoryContents(cicdTemplatePath, projectName);
+});
 
 function createDirectoryContents(templatePath, newProjectPath) {
   const filesToCreate = fs.readdirSync(templatePath);
 
-  filesToCreate.forEach(file => {
-    const ogFilePath = `${templatePath}/${file}`
+  filesToCreate.forEach((file) => {
+    const ogFilePath = `${templatePath}/${file}`;
 
     // get stats about the current file
     const stats = fs.statSync(ogFilePath);
 
-    if(stats.isFile()) {
-      const contents = fs.readFileSync(ogFilePath, 'utf-8');
-
-    
+    if (stats.isFile()) {
+      const contents = fs.readFileSync(ogFilePath, "utf-8");
 
       const writePath = `${CURR_DIR}/${newProjectPath}/${file}`;
-      fs.writeFileSync(writePath, contents, 'utf-8')
+
+      fs.writeFileSync(writePath, contents, "utf-8");
     } else if (stats.isDirectory()) {
       fs.mkdirSync(`${CURR_DIR}/${newProjectPath}/${file}`);
 
       // recursive call
-      createDirectoryContents(`${templatePath}/${file}`, `${newProjectPath}/${file}`)
+      createDirectoryContents(
+        `${templatePath}/${file}`,
+        `${newProjectPath}/${file}`
+      );
     }
-  })
+  });
 }
