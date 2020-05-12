@@ -6,6 +6,8 @@ const inquirer = require("inquirer");
 const CHOICES = {
   projects: fs.readdirSync(`${__dirname}/templates/projects`),
   cicd: fs.readdirSync(`${__dirname}/templates/cicd`),
+  linting: fs.readdirSync(`${__dirname}/templates/linting`),
+  hosting: fs.readdirSync(`${__dirname}/templates/hosting`),
 };
 
 const QUESTIONS = [
@@ -20,6 +22,18 @@ const QUESTIONS = [
     type: "list",
     message: "Would you like to setup continous integration/deployment?",
     choices: [...CHOICES.cicd, "none"],
+  },
+  {
+    name: "linting",
+    type: "list",
+    message: "Would you like to have some standards?",
+    choices: [...CHOICES.linting, "none"],
+  },
+  {
+    name: "hosting",
+    type: "list",
+    message: "Would you like to have some standards?",
+    choices: [...CHOICES.hosting, "none"],
   },
   {
     name: "project-name",
@@ -39,17 +53,25 @@ inquirer.prompt(QUESTIONS).then((answers) => {
   const projectChoice = answers["project-choice"];
   const projectName = answers["project-name"];
   const cicdChoice = answers["cicd-provider"];
+  const lintingChoice = answers["linting"];
+  const hostingChoice = answers["hosting"];
   const projectTemplatePath = `${__dirname}/templates/projects/${projectChoice}`;
   const cicdTemplatePath = `${__dirname}/templates/cicd/${cicdChoice}`;
+  const lintingTemplatePath = `${__dirname}/templates/linting/${lintingChoice}`;
+  const hostingTemplatePath = `${__dirname}/templates/hosting/${hostingChoice}`;
 
   fs.mkdirSync(`${CURR_DIR}/${projectName}`);
 
   createDirectoryContents(projectTemplatePath, projectName);
 
-  console.log(cicdTemplatePath);
-
   if (!fs.existsSync(cicdTemplatePath)) return;
   createDirectoryContents(cicdTemplatePath, projectName);
+
+  if (!fs.existsSync(lintingTemplatePath)) return;
+  createDirectoryContents(lintingTemplatePath, projectName);
+
+  if (!fs.existsSync(hostingTemplatePath)) return;
+  createDirectoryContents(hostingTemplatePath, projectName);
 });
 
 function createDirectoryContents(templatePath, newProjectPath) {
