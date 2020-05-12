@@ -1,0 +1,39 @@
+name: Node CI
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: yarn install, build, and test
+        env:
+          CI: true
+          SASS_PATH: ${{ secrets.SASS_PATH }}
+        run: |
+          yarn install
+          yarn run build --if-present
+          yarn test
+      - uses: mmhuntsberry/ibmcloud-deployment-action@master
+        with:
+          ibm-api-key: ${{ secrets.IBMCLOUD_API_KEY }}
+          cf-api-endpoint: ${{ secrets.CF_API_ENDPOINT }}
+          cf-organization: ${{ secrets.CF_ORGANIZATION }}
+          cf-space: ${{ secrets.CF_SPACE }}

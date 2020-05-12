@@ -1,0 +1,38 @@
+// Carbon Style Imports
+@import "carbon-components/scss/globals/scss/vendor/@carbon/type/scss/font-family";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/layout/scss/breakpoint";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vars";
+
+// Vendor Imports
+@import "../../styles/vendors/normalize";
+@import "../../styles/base/base";
+
+.app-content {
+  height: 100%;
+  padding: $layout-05 $spacing-04 0;
+  background-color: #000;
+  text-align: center;
+}
+
+.app-text,
+.app-link,
+.app-link:visited {
+  color: #fff;
+}
+
+.app-text {
+  @include carbon--type-style("productive-heading-03");
+  margin-bottom: $spacing-04;
+}
+
+.app-link {
+  @include carbon--type-style("productive-heading-04");
+  text-align: center;
+}
+
+.carbon-icon {
+  max-width: 400px;
+  max-height: 400px;
+  margin-bottom: $spacing-07;
+}
