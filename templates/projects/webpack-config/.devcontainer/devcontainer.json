@@ -1,0 +1,27 @@
+{
+  "name": "carbon-react-app",
+  "image": "mmhuntsberry/carbon_react",
+  "appPort": 8080,
+  "extensions": [
+    "burkeholland.react-food-truck",
+    "aaron-bond.better-comments",
+    "coenraads.bracket-pair-colorizer",
+    "andys8.jest-snippets",
+    "ms-vscode-remote.vscode-remote-extensionpack",
+    "shan.code-settings-sync",
+    "vscode-icons-team.vscode-icons",
+    "ms-azuretools.vscode-cosmosdb",
+    "box-of-hats.bemhelper",
+    "naumovs.color-highlight",
+    "ms-azuretools.vscode-docker",
+    "p1c2u.docker-compose",
+    "vladmrnv.expresssnippet",
+    "tombonnike.vscode-status-bar-format-toggle",
+    "github.vscode-pull-request-github",
+    "eamodio.gitlens",
+    "shinnn.stylelint",
+    "britesnow.vscode-toggle-quotes",
+    "pflannery.vscode-versionlens",
+    "maxvanderschee.web-accessibility"
+  ]
+}

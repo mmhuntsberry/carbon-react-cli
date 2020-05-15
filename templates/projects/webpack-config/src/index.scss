@@ -1,0 +1,7 @@
+// carbon ui shell
+$feature-flags: (
+  ui-shell: true
+);
+
+// import carbon components styles
+@import "carbon-components/scss/globals/scss/styles";
