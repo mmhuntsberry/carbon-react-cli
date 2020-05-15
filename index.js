@@ -32,7 +32,7 @@ const QUESTIONS = [
   {
     name: "hosting",
     type: "list",
-    message: "Would you like to have some standards?",
+    message: "Where would you like to host your project?",
     choices: [...CHOICES.hosting, "none"],
   },
   {
