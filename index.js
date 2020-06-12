@@ -23,12 +23,12 @@ const QUESTIONS = [
     message: "Would you like to setup continous integration/deployment?",
     choices: [...CHOICES.cicd, "none"],
   },
-  {
-    name: "linting",
-    type: "list",
-    message: "Would you like to have some standards?",
-    choices: [...CHOICES.linting, "none"],
-  },
+  // {
+  //   name: "linting",
+  //   type: "list",
+  //   message: "Would you like to have some standards?",
+  //   choices: [...CHOICES.linting, "none"],
+  // },
   {
     name: "hosting",
     type: "list",
