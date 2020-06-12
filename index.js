@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
+// needed to work with file system
 const fs = require("fs");
+// collection of interactive cli commands
 const inquirer = require("inquirer");
+
+const { write2Yaml } = require("./utils/helpers.js");
 
 const CHOICES = {
   projects: fs.readdirSync(`${__dirname}/templates/projects`),
@@ -41,8 +45,9 @@ const QUESTIONS = [
     message: "Project name:",
     validate(input) {
       if (/^([A-Za-z\-\_\d])+$/.test(input)) return true;
-      else
+      else {
         return "Project name may only include letters, numbers, underscores, and hashes.";
+      }
     },
   },
 ];
@@ -61,7 +66,6 @@ inquirer.prompt(QUESTIONS).then((answers) => {
   const hostingTemplatePath = `${__dirname}/templates/hosting/${hostingChoice}`;
 
   fs.mkdirSync(`${CURR_DIR}/${projectName}`);
-
   createDirectoryContents(projectTemplatePath, projectName);
 
   if (!fs.existsSync(cicdTemplatePath)) return;
@@ -71,6 +75,7 @@ inquirer.prompt(QUESTIONS).then((answers) => {
   createDirectoryContents(lintingTemplatePath, projectName);
 
   if (!fs.existsSync(hostingTemplatePath)) return;
+
   createDirectoryContents(hostingTemplatePath, projectName);
 });
 
